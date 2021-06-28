@@ -1,0 +1,338 @@
+@font-face {
+    font-family: 'Vollkorn', serif;
+    src: url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;700&display=swap');
+}
+
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.content {
+    margin: 0 auto;
+    padding: 50px 220px;
+    width: 960px;
+}
+
+.content h1 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding: 0;
+    font-weight: normal;
+    font-size: 50px;
+    line-height: 60px;
+}
+
+.content p {
+    margin-top: 0;
+    margin-bottom: 60px;
+    padding: 0;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+.exchangeContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.controls {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.swapTickers {
+    filter: drop-shadow(16px 16px 20px blue);
+    display: block;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.99 17H20V19H7.99V22L4 18L7.99 14V17Z' fill='%2311B3FE'/%3E%3Cpath d='M16.01 8H4V10H16.01V13L20 9L16.01 5V8Z' fill='%2311B3FE'/%3E%3C/svg%3E%0A");
+}
+
+.swapTickers:hover {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.99 17H20V19H7.99V22L4 18L7.99 14V17Z' fill='%230095E0'/%3E%3Cpath d='M16.01 8H4V10H16.01V13L20 9L16.01 5V8Z' fill='%230095E0'/%3E%3C/svg%3E%0A");
+}
+
+input[type='search'] {
+    padding-left: 16px;
+    width: 100%;
+    height: 50px;
+    font-family: 'Vollkorn', serif;
+    font-size: 16px;
+    color: #282828;
+    box-sizing: border-box;
+    background-color: #f6f7f8;
+    border: 1px solid #c1d9e6;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+input[type='search']::placeholder {
+    color: #80a2b6;
+}
+
+input[type='search']:focus {
+    outline: none;
+}
+
+.currencies {
+    position: absolute;
+    width: 440px;
+    max-height: 150px;
+    right: 0;
+    top: 49px;
+    border: 1px solid #c1d9e6;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-sizing: border-box;
+    overflow: auto;
+    z-index: 1;
+}
+
+.currencies::-webkit-scrollbar {
+    width: 0;
+}
+.currencies::-webkit-scrollbar {
+    width: 0;
+}
+
+.inputValue {
+    padding: 0;
+    padding-left: 16px;
+    display: block;
+    width: 290px;
+    height: 48px;
+    font-family: 'Vollkorn', serif;
+    font-size: 16px;
+    line-height: 23px;
+    background-color: transparent;
+    border: none;
+    border-top: 1px solid #e3ebef;
+    border-bottom: 1px solid #e3ebef;
+    border-left: 1px solid #e3ebef;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.inputValue:focus {
+    outline: none;
+}
+
+.exchangeFrom,
+.exchangeTo {
+    position: relative;
+    display: block;
+    width: 440px;
+    height: 50px;
+    text-transform: uppercase;
+    background-color: #f6f7f8;
+    box-sizing: border-box;
+}
+
+.exchangeFrom:hover,
+.exchangeTo:hover {
+    background-color: #eaf1f7;
+}
+
+.currentTo,
+.currentFrom {
+    padding: 0;
+    padding-left: 66px;
+    position: relative;
+    display: block;
+    width: 150px;
+    text-align: left;
+    font-family: 'Vollkorn', serif;
+    font-size: 16px;
+    line-height: 23px;
+    text-transform: uppercase;
+    background-color: transparent;
+    box-sizing: border-box;
+    background-position: 36px center;
+    background-repeat: no-repeat;
+    border: none;
+    border-top: 1px solid #e3ebef;
+    border-right: 1px solid #e3ebef;
+    border-bottom: 1px solid #e3ebef;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.currentTo:hover,
+.currentFrom:hover {
+    background-color: #eaf1f7;
+}
+
+.currentTo::after,
+.currentFrom::after {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    display: block;
+    width: 1px;
+    height: 30px;
+    content: '';
+    background-color: #c1d9e6;
+}
+
+.exchange-currency {
+    display: block;
+    height: 50px;
+}
+
+.exchange-currency button {
+    display: block;
+    padding-left: 2rem;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    font-family: 'Vollkorn', serif;
+    background-color: #f6f7f8;
+    background-repeat: no-repeat;
+    background-position: 0.5rem center;
+    border: none;
+}
+
+.exchange-currency button:hover {
+    background-color: #eaf1f7;
+    cursor: pointer;
+}
+
+.exchange-currency .cryptoTicker {
+    color: #282828;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.exchange-currency .cryptoName {
+    color: #80a2b6;
+}
+
+.goExchange {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.goExchange label {
+    display: block;
+    margin-top: 32px;
+    width: 723px;
+    font-size: 16px;
+    line-height: 23px;
+    color: #282828;
+}
+
+.exchangeAddress {
+    padding: 0;
+    padding-left: 16px;
+    margin-top: 8px;
+    width: 100%;
+    height: 50px;
+    font-family: 'Vollkorn', serif;
+    font-size: 16px;
+    line-height: 23px;
+    background-color: #f6f7f8;
+    border: 1px solid #e3ebef;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.exchangeSubmit {
+    position: relative;
+    padding: 0;
+    display: block;
+    width: 205px;
+    height: 50px;
+    align-items: center;
+    font-family: 'Vollkorn', serif;
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    color: white;
+    text-transform: uppercase;
+    background-color: #11b3fe;
+    border: none;
+    border-radius: 5px;
+}
+
+.error {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.error span {
+    position: absolute;
+    display: block;
+    bottom: -25px;
+    left: 15px;
+    font-size: 16px;
+    line-height: 23px;
+    font-weight: normal;
+    color: #e03f3f;
+    text-transform: initial;
+}
+
+.hidden {
+    display: none;
+}
+
+.exchangeSubmit:hover {
+    background-color: #0095e0;
+    cursor: pointer;
+}
+
+@media (max-width: 360px) {
+    .content {
+        padding: 16px;
+        width: 360px;
+    }
+    .exchangeContainer {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 360px;
+    }
+    .exchangeFrom,
+    .exchangeTo {
+        max-width: 100%;
+    }
+    .currencies {
+        z-index: 1;
+    }
+    .swapTickers {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        align-self: flex-end;
+        transform: rotate(90deg);
+    }
+    .goExchange {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .goExchange label {
+        max-width: 100%;
+    }
+    .exchangeSubmit {
+        margin-top: 16px;
+        margin-bottom: 45px;
+        width: 100%;
+    }
+}
