@@ -47,7 +47,6 @@ body {
 }
 
 .swapTickers {
-    filter: drop-shadow(16px 16px 20px blue);
     display: block;
     padding: 0;
     width: 24px;

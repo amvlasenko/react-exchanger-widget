@@ -19,7 +19,7 @@ class Widget extends React.Component {
                 image: 'https://changenow.io/images/sprite/currencies/eth.svg',
             },
         ],
-        minimalAmount: '123',
+        minimalAmount: '',
         estimatedAmount: '',
         inputFromValue: '',
         inputToValue: '',
