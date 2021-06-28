@@ -10,7 +10,7 @@ function Currency(props) {
 
     return (
         <div className='exchange-currency'>
-            <button style={currencyStyle} onClick={handler}>
+            <button style={currencyStyle} onClick={handler} aria-label={name}>
                 <span className={'cryptoTicker'}>{ticker} </span>
                 <span className={'cryptoName'}>{name}</span>
             </button>

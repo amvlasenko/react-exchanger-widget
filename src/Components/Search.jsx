@@ -18,6 +18,7 @@ class Search extends React.Component {
                 value={this.state.search}
                 onChange={(e) => this.setState({ search: e.target.value })}
                 onKeyDown={this.handleKey}
+                aria-label='Enter the name or ticker of the currency to search'
             />
         );
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Currencies } from './Currencies';
 import { Search } from './Search';
+
 const KEY = 'c9155859d90d239f909d2906233816b26cd8cf5ede44702d422667672b58b0cd';
 
 class Widget extends React.Component {
@@ -198,6 +199,7 @@ class Widget extends React.Component {
                                     className={'inputValue'}
                                     onChange={this.userValueExchange}
                                     value={this.state.inputFromValue}
+                                    aria-label='Enter the exchange amount'
                                 />
                             )}
                             {!this.state.searchFromIsOpened ? (
@@ -210,6 +212,7 @@ class Widget extends React.Component {
                                                 !this.state.searchFromIsOpened,
                                         });
                                     }}
+                                    aria-label='Select currency to exchange'
                                 >
                                     {exchangeFrom.ticker.slice(0, 4)}
                                 </button>
@@ -226,7 +229,10 @@ class Widget extends React.Component {
                             ) : null}
                         </div>
                     </div>
-                    <button className='swapTickers'></button>
+                    <button
+                        className='swapTickers'
+                        aria-label='Swapping tickers, not available now'
+                    ></button>
                     {/* /* This controls change right controls */}
                     <div className='exchangeTo'>
                         <div className='controls'>
@@ -248,6 +254,7 @@ class Widget extends React.Component {
                                         })
                                     }
                                     value={this.state.inputToValue}
+                                    aria-label='You will get'
                                 />
                             )}
                             {!this.state.searchToIsOpened ? (
@@ -260,6 +267,7 @@ class Widget extends React.Component {
                                                 !this.state.searchToIsOpened,
                                         });
                                     }}
+                                    aria-label='Select currency to exchange'
                                 >
                                     {exchangeTo.ticker.slice(0, 4)}
                                 </button>
@@ -278,14 +286,21 @@ class Widget extends React.Component {
                         </div>
                     </div>
                     <div className='goExchange'>
-                        <label htmlFor='exchangeAdress'>
+                        <label htmlFor='exchangeAddress'>
                             Your{' '}
                             {exchangeTo.name ? exchangeTo.name : 'Ethereum'}{' '}
                             address
-                            <br />
-                            <input type='text' className='exchangeAddress' />
+                            <input
+                                type='text'
+                                className='exchangeAddress'
+                                id='exchangeAddress'
+                                aria-label='Enter exchange address'
+                            />
                         </label>
-                        <button className='exchangeSubmit'>
+                        <button
+                            className='exchangeSubmit'
+                            aria-label='Make an exchange'
+                        >
                             Exchange
                             <div className={exchangeToError}>
                                 <span>
@@ -300,11 +315,6 @@ class Widget extends React.Component {
                             </div>
                         </button>
                     </div>
-                    <Currencies
-                        currencies={this.state.currencies}
-                        setCurrent={this.setTo}
-                        getMinAmount={this.getMinAmount}
-                    />
                 </div>
             </div>
         );
