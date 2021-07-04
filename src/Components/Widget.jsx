@@ -2,7 +2,7 @@ import React from 'react';
 import { Currencies } from './Currencies';
 import { Search } from './Search';
 
-const KEY = 'c9155859d90d239f909d2906233816b26cd8cf5ede44702d422667672b58b0cd';
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 class Widget extends React.Component {
     state = {
@@ -38,7 +38,9 @@ class Widget extends React.Component {
             .then((response) => response.json())
             .then((data) => this.setState({ currencies: data }))
             .catch((error) => console.log('error', error));
-        fetch(`https://api.changenow.io/v1/min-amount/btc_eth?api_key=${KEY}`)
+        fetch(
+            `https://api.changenow.io/v1/min-amount/btc_eth?api_key=${API_KEY}`
+        )
             .then((response) => response.json())
             .then((data) => this.setState({ minimalAmount: data.minAmount }))
             .then(() =>
@@ -46,7 +48,7 @@ class Widget extends React.Component {
             )
             .then(() =>
                 fetch(
-                    `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/btc_eth?api_key=${KEY}`
+                    `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/btc_eth?api_key=${API_KEY}`
                 )
                     .then((response) => response.json())
                     .then((data) => this.setState({ estimatedAmount: data }))
@@ -65,7 +67,7 @@ class Widget extends React.Component {
         const [exchangeTo] = this.state.exchangeTo;
 
         fetch(
-            `https://api.changenow.io/v1/min-amount/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${KEY}`
+            `https://api.changenow.io/v1/min-amount/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${API_KEY}`
         )
             .then((response) => response.json())
             .then((data) => this.setState({ minimalAmount: data }))
@@ -85,7 +87,7 @@ class Widget extends React.Component {
             )
             .then(() =>
                 fetch(
-                    `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${KEY}`
+                    `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${API_KEY}`
                 )
                     .then((response) => response.json())
                     .then((data) => this.setState({ estimatedAmount: data }))
@@ -103,7 +105,7 @@ class Widget extends React.Component {
         const [exchangeFrom] = this.state.exchangeFrom;
         const [exchangeTo] = this.state.exchangeTo;
         fetch(
-            `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${KEY}`
+            `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${API_KEY}`
         )
             .then((response) => response.json())
             .then((data) => this.setState({ estimatedAmount: data }))
