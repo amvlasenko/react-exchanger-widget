@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/://amvlasenko.github.io/react-exchanger-widget/static/css/main.777dd35c.chunk.css",
-    "main.js": "/://amvlasenko.github.io/react-exchanger-widget/static/js/main.1d4c6f1d.chunk.js",
-    "main.js.map": "/://amvlasenko.github.io/react-exchanger-widget/static/js/main.1d4c6f1d.chunk.js.map",
-    "runtime-main.js": "/://amvlasenko.github.io/react-exchanger-widget/static/js/runtime-main.c9c08327.js",
-    "runtime-main.js.map": "/://amvlasenko.github.io/react-exchanger-widget/static/js/runtime-main.c9c08327.js.map",
-    "static/js/2.c6acdb0a.chunk.js": "/://amvlasenko.github.io/react-exchanger-widget/static/js/2.c6acdb0a.chunk.js",
-    "static/js/2.c6acdb0a.chunk.js.map": "/://amvlasenko.github.io/react-exchanger-widget/static/js/2.c6acdb0a.chunk.js.map",
-    "index.html": "/://amvlasenko.github.io/react-exchanger-widget/index.html",
-    "static/css/main.777dd35c.chunk.css.map": "/://amvlasenko.github.io/react-exchanger-widget/static/css/main.777dd35c.chunk.css.map",
-    "static/js/2.c6acdb0a.chunk.js.LICENSE.txt": "/://amvlasenko.github.io/react-exchanger-widget/static/js/2.c6acdb0a.chunk.js.LICENSE.txt"
+    "main.css": "/react-exchanger-widget/static/css/main.777dd35c.chunk.css",
+    "main.js": "/react-exchanger-widget/static/js/main.1d4c6f1d.chunk.js",
+    "main.js.map": "/react-exchanger-widget/static/js/main.1d4c6f1d.chunk.js.map",
+    "runtime-main.js": "/react-exchanger-widget/static/js/runtime-main.a592922b.js",
+    "runtime-main.js.map": "/react-exchanger-widget/static/js/runtime-main.a592922b.js.map",
+    "static/js/2.c6acdb0a.chunk.js": "/react-exchanger-widget/static/js/2.c6acdb0a.chunk.js",
+    "static/js/2.c6acdb0a.chunk.js.map": "/react-exchanger-widget/static/js/2.c6acdb0a.chunk.js.map",
+    "index.html": "/react-exchanger-widget/index.html",
+    "static/css/main.777dd35c.chunk.css.map": "/react-exchanger-widget/static/css/main.777dd35c.chunk.css.map",
+    "static/js/2.c6acdb0a.chunk.js.LICENSE.txt": "/react-exchanger-widget/static/js/2.c6acdb0a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.c9c08327.js",
+    "static/js/runtime-main.a592922b.js",
     "static/js/2.c6acdb0a.chunk.js",
     "static/css/main.777dd35c.chunk.css",
     "static/js/main.1d4c6f1d.chunk.js"
