@@ -24,40 +24,56 @@ function Widget() {
     const [exchangeError, setExchangeError] = useState(false);
     const [exchangeErrorValue, setExchangeErrorValue] = useState('');
 
-    useEffect(async () => {
-        let currenciesResponse = await serverAPI.getCurrenies();
-        setCurrencies(currenciesResponse);
-        let minAmountResponse = await serverAPI.getMinAmount(
-            exchangeFrom.ticker,
-            exchangeTo.ticker,
-            minimalAmount
-        );
-        setMinimalAmount(minAmountResponse);
+    useEffect(() => {
+        async function fetchData() {
+            let currenciesResponse = await serverAPI.getCurrenies();
+            setCurrencies(currenciesResponse);
+            let minAmountResponse = await serverAPI.getMinAmount(
+                exchangeFrom.ticker,
+                exchangeTo.ticker,
+                minimalAmount
+            );
+            setMinimalAmount(minAmountResponse);
+        }
+        fetchData();
     }, []);
 
-    useEffect(async () => {
-        setExchangeError(!minimalAmount.error ? false : true);
-        setExchangeErrorValue(!minimalAmount.error ? '' : minimalAmount.error);
-        setInputFromValue(!minimalAmount.error ? minimalAmount.minAmount : '0');
+    useEffect(() => {
+        async function fetchData() {
+            setExchangeError(!minimalAmount.error ? false : true);
+            setExchangeErrorValue(
+                !minimalAmount.error ? '' : minimalAmount.error
+            );
+            setInputFromValue(
+                !minimalAmount.error ? minimalAmount.minAmount : '0'
+            );
+        }
+        fetchData();
     }, [minimalAmount]);
 
-    useEffect(async () => {
-        let estimatedAmountResponse = await serverAPI.getEstimatedAmount(
-            inputFromValue,
-            exchangeFrom.ticker,
-            exchangeTo.ticker
-        );
-        setInputToValue(estimatedAmountResponse);
-        setEstimatedAmount(estimatedAmountResponse);
+    useEffect(() => {
+        async function fetchData() {
+            let estimatedAmountResponse = await serverAPI.getEstimatedAmount(
+                inputFromValue,
+                exchangeFrom.ticker,
+                exchangeTo.ticker
+            );
+            setInputToValue(estimatedAmountResponse);
+            setEstimatedAmount(estimatedAmountResponse);
+        }
+        fetchData();
     }, [inputFromValue]);
 
-    useEffect(async () => {
-        let minAmountResponse = await serverAPI.getMinAmount(
-            exchangeFrom.ticker,
-            exchangeTo.ticker,
-            minimalAmount
-        );
-        setMinimalAmount(minAmountResponse);
+    useEffect(() => {
+        async function fetchData() {
+            let minAmountResponse = await serverAPI.getMinAmount(
+                exchangeFrom.ticker,
+                exchangeTo.ticker,
+                minimalAmount
+            );
+            setMinimalAmount(minAmountResponse);
+        }
+        fetchData();
     }, [exchangeFrom, exchangeTo]);
 
     useEffect(() => {
@@ -106,18 +122,6 @@ function Widget() {
         throttle(
             serverAPI.getEstimatedAmount(
                 inputFromValue,
-                exchangeFrom.ticker,
-                exchangeTo.ticker
-            ),
-            500
-        );
-    };
-    const userValueToExchange = (e) => {
-        setInputToValue(e.target.value);
-
-        throttle(
-            serverAPI.getEstimatedAmount(
-                inputToValue,
                 exchangeFrom.ticker,
                 exchangeTo.ticker
             ),
