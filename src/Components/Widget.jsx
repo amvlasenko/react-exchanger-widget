@@ -1,326 +1,283 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import serverAPI from '../features/serverAPI';
 import { Currencies } from './Currencies';
 import { Search } from './Search';
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+function Widget() {
+    const [currencies, setCurrencies] = useState([]);
+    const [exchangeFrom, setExchangeFrom] = useState({
+        ticker: 'btc',
+        image: 'https://changenow.io/images/sprite/currencies/btc.svg',
+    });
+    const [exchangeTo, setExchangeTo] = useState({
+        ticker: 'eth',
+        image: 'https://changenow.io/images/sprite/currencies/eth.svg',
+    });
+    const [minimalAmount, setMinimalAmount] = useState('');
+    const [estimatedAmount, setEstimatedAmount] = useState('');
+    const [inputFromValue, setInputFromValue] = useState('');
+    const [inputToValue, setInputToValue] = useState('');
+    const [searchFromIsOpened, setSearchFromIsOpened] = useState(false);
+    const [searchToIsOpened, setSearchToIsOpened] = useState(false);
+    const [searchFromStringValue, setSearchFromStringValue] = useState('');
+    const [searchToStringValue, setSearchToStringValue] = useState('');
+    const [exchangeError, setExchangeError] = useState(false);
+    const [exchangeErrorValue, setExchangeErrorValue] = useState('');
 
-class Widget extends React.Component {
-    state = {
-        currencies: [],
-        exchangeFrom: [
-            {
-                ticker: 'btc',
-                image: 'https://changenow.io/images/sprite/currencies/btc.svg',
-            },
-        ],
-        exchangeTo: [
-            {
-                ticker: 'eth',
-                image: 'https://changenow.io/images/sprite/currencies/eth.svg',
-            },
-        ],
-        minimalAmount: '',
-        estimatedAmount: '',
-        inputFromValue: '',
-        inputToValue: '',
-        searchFromIsOpened: false,
-        searchToIsOpened: false,
-        searchFromStringValue: '',
-        searchToStringValue: '',
-        exchangeError: false,
-        exchangeErrorValue: '',
-    };
+    useEffect(async () => {
+        let currenciesResponse = await serverAPI.getCurrenies();
+        setCurrencies(currenciesResponse);
+        let minAmountResponse = await serverAPI.getMinAmount(
+            exchangeFrom.ticker,
+            exchangeTo.ticker,
+            minimalAmount
+        );
+        setMinimalAmount(minAmountResponse);
+    }, []);
 
-    componentDidMount() {
-        fetch(
-            'https://api.changenow.io/v1/currencies?active=true&fixedRate=true'
-        )
-            .then((response) => response.json())
-            .then((data) => this.setState({ currencies: data }))
-            .catch((error) => console.log('error', error));
-        fetch(
-            `https://api.changenow.io/v1/min-amount/btc_eth?api_key=${API_KEY}`
-        )
-            .then((response) => response.json())
-            .then((data) => this.setState({ minimalAmount: data.minAmount }))
-            .then(() =>
-                this.setState({ inputFromValue: this.state.minimalAmount })
-            )
-            .then(() =>
-                fetch(
-                    `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/btc_eth?api_key=${API_KEY}`
-                )
-                    .then((response) => response.json())
-                    .then((data) => this.setState({ estimatedAmount: data }))
-                    .then(() =>
-                        this.setState({
-                            inputToValue:
-                                this.state.estimatedAmount.estimatedAmount,
-                        })
-                    )
-            )
-            .catch((error) => console.log('error', error));
-    }
+    useEffect(async () => {
+        setExchangeError(!minimalAmount.error ? false : true);
+        setExchangeErrorValue(!minimalAmount.error ? '' : minimalAmount.error);
+        setInputFromValue(!minimalAmount.error ? minimalAmount.minAmount : '0');
+    }, [minimalAmount]);
 
-    getMinAmount = () => {
-        const [exchangeFrom] = this.state.exchangeFrom;
-        const [exchangeTo] = this.state.exchangeTo;
+    useEffect(async () => {
+        let estimatedAmountResponse = await serverAPI.getEstimatedAmount(
+            inputFromValue,
+            exchangeFrom.ticker,
+            exchangeTo.ticker
+        );
+        setInputToValue(estimatedAmountResponse);
+    }, [inputFromValue]);
 
-        fetch(
-            `https://api.changenow.io/v1/min-amount/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${API_KEY}`
-        )
-            .then((response) => response.json())
-            .then((data) => this.setState({ minimalAmount: data }))
-            .then(() =>
-                !this.state.minimalAmount.error
-                    ? this.setState({
-                          exchangeError: false,
-                          exchangeErrorValue: '',
-                          inputFromValue: this.state.minimalAmount.minAmount,
-                      })
-                    : this.setState({
-                          inputToValue: '-',
-                          exchangeError: true,
-                          exchangeErrorValue: this.state.minimalAmount.error,
-                          inputFromValue: '0',
-                      })
-            )
-            .then(() =>
-                fetch(
-                    `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${API_KEY}`
-                )
-                    .then((response) => response.json())
-                    .then((data) => this.setState({ estimatedAmount: data }))
-                    .then(() =>
-                        this.setState({
-                            inputToValue:
-                                this.state.estimatedAmount.estimatedAmount,
-                        })
-                    )
-            )
-            .catch((error) => console.log('error', error));
-    };
+    useEffect(async () => {
+        let estimatedAmountResponse = await serverAPI.getEstimatedAmount(
+            inputFromValue,
+            exchangeFrom.ticker,
+            exchangeTo.ticker
+        );
+        setInputFromValue(estimatedAmountResponse);
+    }, [inputToValue]);
 
-    getEstimatedAmount = () => {
-        const [exchangeFrom] = this.state.exchangeFrom;
-        const [exchangeTo] = this.state.exchangeTo;
-        fetch(
-            `https://api.changenow.io/v1/exchange-amount/${this.state.inputFromValue}/${exchangeFrom.ticker}_${exchangeTo.ticker}?api_key=${API_KEY}`
-        )
-            .then((response) => response.json())
-            .then((data) => this.setState({ estimatedAmount: data }))
-            .then(() =>
-                this.state.estimatedAmount.estimatedAmount
-                    ? this.setState({
-                          inputToValue:
-                              this.state.estimatedAmount.estimatedAmount,
-                          exchangeError: false,
-                          exchangeErrorValue: '',
-                      })
-                    : this.setState({
-                          inputToValue: '-',
-                          exchangeError: true,
-                          exchangeErrorValue: this.state.estimatedAmount.error,
-                      })
-            )
-            .catch((error) => console.log('error', error));
-    };
+    useEffect(async () => {
+        let minAmountResponse = await serverAPI.getMinAmount(
+            exchangeFrom.ticker,
+            exchangeTo.ticker,
+            minimalAmount
+        );
+        setMinimalAmount(minAmountResponse);
+    }, [exchangeFrom, exchangeTo]);
 
-    userValueExchange = (e) => {
-        this.setState(
-            () => {
-                return { inputFromValue: e.target.value };
-            },
-            () => {
-                this.getEstimatedAmount();
+    useEffect(() => {
+        setExchangeError(estimatedAmount.estimatedAmount ? false : true);
+        setExchangeErrorValue(
+            estimatedAmount.estimatedAmount ? '' : estimatedAmount.error
+        );
+        setInputToValue(
+            estimatedAmount.estimatedAmount
+                ? estimatedAmount.estimatedAmount
+                : '-'
+        );
+    }, [estimatedAmount]);
+
+    const throttle = (func, ms) => {
+        let isThrottled = false,
+            savedArgs,
+            savedThis;
+
+        function wrapper() {
+            if (isThrottled) {
+                savedArgs = arguments;
+                savedThis = this;
+                return;
             }
+
+            func.apply(this, arguments);
+
+            isThrottled = true;
+
+            setTimeout(function () {
+                isThrottled = false;
+                if (savedArgs) {
+                    wrapper.apply(savedThis, savedArgs);
+                    savedArgs = savedThis = null;
+                }
+            }, ms);
+        }
+
+        return wrapper;
+    };
+
+    const userValueFromExchange = (e) => {
+        setInputFromValue(e.target.value);
+
+        throttle(
+            serverAPI.getEstimatedAmount(
+                inputFromValue,
+                exchangeFrom.ticker,
+                exchangeTo.ticker
+            ),
+            5000
+        );
+    };
+    const userValueToExchange = (e) => {
+        setInputToValue(e.target.value);
+
+        throttle(
+            serverAPI.getEstimatedAmount(
+                inputToValue,
+                exchangeFrom.ticker,
+                exchangeTo.ticker
+            ),
+            5000
         );
     };
 
-    setFrom = (name, image) => {
-        this.setState(
-            () => {
-                return {
-                    exchangeFrom: this.state.currencies.filter(
-                        (currency) =>
-                            currency.name === name && currency.image === image
-                    ),
-                    searchFromIsOpened: false,
-                    searchFromStringValue: '',
-                };
-            },
-            () => this.getMinAmount()
+    const setFrom = (name, image) => {
+        setExchangeFrom(
+            ...currencies.filter(
+                (currency) => currency.name === name && currency.image === image
+            )
         );
+        setSearchFromIsOpened(false);
+        setSearchFromStringValue('');
     };
 
-    setTo = (name, image) => {
-        this.setState(
-            () => {
-                return {
-                    exchangeTo: this.state.currencies.filter(
-                        (currency) =>
-                            currency.name === name && currency.image === image
-                    ),
-                    searchToIsOpened: false,
-                    searchToStringValue: '',
-                };
-            },
-            () => this.getMinAmount()
+    const setTo = (name, image) => {
+        setExchangeTo(
+            ...currencies.filter(
+                (currency) => currency.name === name && currency.image === image
+            )
         );
+        setSearchToIsOpened(false);
+        setSearchToStringValue('');
     };
 
-    render() {
-        const [exchangeFrom] = this.state.exchangeFrom;
-        const [exchangeTo] = this.state.exchangeTo;
-        const currentFromIcon = {
-            backgroundImage: 'url(' + exchangeFrom.image + ')',
-        };
-        const currentToIcon = {
-            backgroundImage: 'url(' + exchangeTo.image + ')',
-        };
-        let exchangeToError = 'hidden';
-        this.state.exchangeError
-            ? (exchangeToError = 'error')
-            : (exchangeToError = 'hidden');
-        return (
-            <div className='App'>
-                <div className='exchangeContainer'>
-                    <div className='exchangeFrom'>
-                        <div className='controls'>
-                            {this.state.searchFromIsOpened ? (
-                                <Search
-                                    searchCurrencies={(e) =>
-                                        this.setState({
-                                            searchFromStringValue: e,
-                                        })
-                                    }
-                                />
-                            ) : (
-                                <input
-                                    type='text'
-                                    className={'inputValue'}
-                                    onChange={this.userValueExchange}
-                                    value={this.state.inputFromValue}
-                                    aria-label='Enter the exchange amount'
-                                />
-                            )}
-                            {!this.state.searchFromIsOpened ? (
-                                <button
-                                    className='currentFrom'
-                                    style={currentFromIcon}
-                                    onClick={(e) => {
-                                        this.setState({
-                                            searchFromIsOpened:
-                                                !this.state.searchFromIsOpened,
-                                        });
-                                    }}
-                                    aria-label='Select currency to exchange'
-                                >
-                                    {exchangeFrom.ticker.slice(0, 4)}
-                                </button>
-                            ) : null}
-                            {this.state.searchFromIsOpened ? (
-                                <Currencies
-                                    searchString={
-                                        this.state.searchFromStringValue
-                                    }
-                                    currencies={this.state.currencies}
-                                    setCurrent={this.setFrom}
-                                    getMinAmount={this.getMinAmount}
-                                />
-                            ) : null}
-                        </div>
-                    </div>
-                    <button
-                        className='swapTickers'
-                        aria-label='Swapping tickers, not available now'
-                    ></button>
-                    {/* /* This controls change right controls */}
-                    <div className='exchangeTo'>
-                        <div className='controls'>
-                            {this.state.searchToIsOpened ? (
-                                <Search
-                                    searchCurrencies={(e) =>
-                                        this.setState({
-                                            searchToStringValue: e,
-                                        })
-                                    }
-                                />
-                            ) : (
-                                <input
-                                    type='text'
-                                    className='inputValue'
-                                    onChange={(e) =>
-                                        this.setState({
-                                            inputToValue: e.target.value,
-                                        })
-                                    }
-                                    value={this.state.inputToValue}
-                                    aria-label='You will get'
-                                />
-                            )}
-                            {!this.state.searchToIsOpened ? (
-                                <button
-                                    className='currentTo'
-                                    style={currentToIcon}
-                                    onClick={(e) => {
-                                        this.setState({
-                                            searchToIsOpened:
-                                                !this.state.searchToIsOpened,
-                                        });
-                                    }}
-                                    aria-label='Select currency to exchange'
-                                >
-                                    {exchangeTo.ticker.slice(0, 4)}
-                                </button>
-                            ) : null}
-
-                            {this.state.searchToIsOpened ? (
-                                <Currencies
-                                    searchString={
-                                        this.state.searchToStringValue
-                                    }
-                                    currencies={this.state.currencies}
-                                    setCurrent={this.setTo}
-                                    getMinAmount={this.getMinAmount}
-                                />
-                            ) : null}
-                        </div>
-                    </div>
-                    <div className='goExchange'>
-                        <label htmlFor='exchangeAddress'>
-                            Your{' '}
-                            {exchangeTo.name ? exchangeTo.name : 'Ethereum'}{' '}
-                            address
+    let currentFromIcon = {
+        backgroundImage: 'url(' + exchangeFrom.image + ')',
+    };
+    let currentToIcon = {
+        backgroundImage: 'url(' + exchangeTo.image + ')',
+    };
+    let exchangeToError = 'hidden';
+    exchangeError ? (exchangeToError = 'error') : (exchangeToError = 'hidden');
+    return (
+        <div className='App'>
+            <div className='exchangeContainer'>
+                <div className='exchangeFrom'>
+                    <div className='controls'>
+                        {searchFromIsOpened ? (
+                            <Search
+                                searchCurrencies={(e) =>
+                                    setSearchFromStringValue(e.target.value)
+                                }
+                            />
+                        ) : (
                             <input
                                 type='text'
-                                className='exchangeAddress'
-                                id='exchangeAddress'
-                                aria-label='Enter exchange address'
+                                className={'inputValue'}
+                                onChange={userValueFromExchange}
+                                value={inputFromValue}
+                                aria-label='Enter the exchange amount'
                             />
-                        </label>
-                        <button
-                            className='exchangeSubmit'
-                            aria-label='Make an exchange'
-                        >
-                            Exchange
-                            <div className={exchangeToError}>
-                                <span>
-                                    {this.state.exchangeErrorValue ===
-                                    'deposit_too_small'
-                                        ? 'Deposit too small'
-                                        : this.state.exchangeErrorValue ===
-                                          'pair_is_inactive'
-                                        ? 'This pair is disabled now'
-                                        : 'Enter deposit'}
-                                </span>
-                            </div>
-                        </button>
+                        )}
+                        {!searchFromIsOpened ? (
+                            <button
+                                className='currentFrom'
+                                style={currentFromIcon}
+                                onClick={(e) => {
+                                    setSearchFromIsOpened(!searchFromIsOpened);
+                                }}
+                                aria-label='Select currency to exchange'
+                            >
+                                {exchangeFrom.ticker.slice(0, 4)}
+                            </button>
+                        ) : null}
+                        {searchFromIsOpened ? (
+                            <Currencies
+                                searchString={searchFromStringValue}
+                                currencies={currencies}
+                                setCurrent={setFrom}
+                                getMinAmount={serverAPI.getMinAmount}
+                            />
+                        ) : null}
                     </div>
                 </div>
+                <button
+                    className='swapTickers'
+                    aria-label='Swapping tickers, not available now'
+                ></button>
+                {/* /* This controls change right controls */}
+                <div className='exchangeTo'>
+                    <div className='controls'>
+                        {searchToIsOpened ? (
+                            <Search
+                                searchCurrencies={(e) =>
+                                    setSearchToStringValue(e.target.value)
+                                }
+                            />
+                        ) : (
+                            <input
+                                type='text'
+                                className='inputValue'
+                                onChange={userValueToExchange}
+                                value={inputToValue}
+                                aria-label='You will get'
+                            />
+                        )}
+                        {!searchToIsOpened ? (
+                            <button
+                                className='currentTo'
+                                style={currentToIcon}
+                                onClick={(e) => {
+                                    setSearchToIsOpened(!searchToIsOpened);
+                                }}
+                                aria-label='Select currency to exchange'
+                            >
+                                {exchangeTo.ticker.slice(0, 4)}
+                            </button>
+                        ) : null}
+
+                        {searchToIsOpened ? (
+                            <Currencies
+                                searchString={searchToStringValue}
+                                currencies={currencies}
+                                setCurrent={setTo}
+                                getMinAmount={serverAPI.getMinAmount}
+                            />
+                        ) : null}
+                    </div>
+                </div>
+                <div className='goExchange'>
+                    <label htmlFor='exchangeAddress'>
+                        Your {exchangeTo.name ? exchangeTo.name : 'Ethereum'}{' '}
+                        address
+                        <input
+                            type='text'
+                            className='exchangeAddress'
+                            id='exchangeAddress'
+                            aria-label='Enter exchange address'
+                        />
+                    </label>
+                    <button
+                        className='exchangeSubmit'
+                        aria-label='Make an exchange'
+                    >
+                        Exchange
+                        <div className={exchangeToError}>
+                            <span>
+                                {exchangeErrorValue === 'deposit_too_small'
+                                    ? 'Deposit too small'
+                                    : exchangeErrorValue === 'pair_is_inactive'
+                                    ? 'This pair is disabled now'
+                                    : 'Enter deposit'}
+                            </span>
+                        </div>
+                    </button>
+                </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export { Widget };
