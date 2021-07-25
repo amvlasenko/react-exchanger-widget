@@ -48,16 +48,8 @@ function Widget() {
             exchangeTo.ticker
         );
         setInputToValue(estimatedAmountResponse);
+        setEstimatedAmount(estimatedAmountResponse);
     }, [inputFromValue]);
-
-    useEffect(async () => {
-        let estimatedAmountResponse = await serverAPI.getEstimatedAmount(
-            inputFromValue,
-            exchangeFrom.ticker,
-            exchangeTo.ticker
-        );
-        setInputFromValue(estimatedAmountResponse);
-    }, [inputToValue]);
 
     useEffect(async () => {
         let minAmountResponse = await serverAPI.getMinAmount(
@@ -108,7 +100,7 @@ function Widget() {
         return wrapper;
     };
 
-    const userValueFromExchange = (e) => {
+    const userValueFrom = (e) => {
         setInputFromValue(e.target.value);
 
         throttle(
@@ -117,7 +109,7 @@ function Widget() {
                 exchangeFrom.ticker,
                 exchangeTo.ticker
             ),
-            5000
+            500
         );
     };
     const userValueToExchange = (e) => {
@@ -129,7 +121,7 @@ function Widget() {
                 exchangeFrom.ticker,
                 exchangeTo.ticker
             ),
-            5000
+            500
         );
     };
 
@@ -162,10 +154,10 @@ function Widget() {
     let exchangeToError = 'hidden';
     exchangeError ? (exchangeToError = 'error') : (exchangeToError = 'hidden');
     return (
-        <div className='App'>
-            <div className='exchangeContainer'>
-                <div className='exchangeFrom'>
-                    <div className='controls'>
+        <div className="App">
+            <div className="exchangeContainer">
+                <div className="exchangeFrom">
+                    <div className="controls">
                         {searchFromIsOpened ? (
                             <Search
                                 searchCurrencies={(e) =>
@@ -174,21 +166,21 @@ function Widget() {
                             />
                         ) : (
                             <input
-                                type='text'
+                                type="text"
                                 className={'inputValue'}
-                                onChange={userValueFromExchange}
+                                onChange={userValueFrom}
                                 value={inputFromValue}
-                                aria-label='Enter the exchange amount'
+                                aria-label="Enter the exchange amount"
                             />
                         )}
                         {!searchFromIsOpened ? (
                             <button
-                                className='currentFrom'
+                                className="currentFrom"
                                 style={currentFromIcon}
                                 onClick={(e) => {
                                     setSearchFromIsOpened(!searchFromIsOpened);
                                 }}
-                                aria-label='Select currency to exchange'
+                                aria-label="Select currency to exchange"
                             >
                                 {exchangeFrom.ticker.slice(0, 4)}
                             </button>
@@ -204,12 +196,12 @@ function Widget() {
                     </div>
                 </div>
                 <button
-                    className='swapTickers'
-                    aria-label='Swapping tickers, not available now'
+                    className="swapTickers"
+                    aria-label="Swapping tickers, not available now"
                 ></button>
                 {/* /* This controls change right controls */}
-                <div className='exchangeTo'>
-                    <div className='controls'>
+                <div className="exchangeTo">
+                    <div className="controls">
                         {searchToIsOpened ? (
                             <Search
                                 searchCurrencies={(e) =>
@@ -218,21 +210,23 @@ function Widget() {
                             />
                         ) : (
                             <input
-                                type='text'
-                                className='inputValue'
-                                onChange={userValueToExchange}
+                                type="text"
+                                className="inputValue"
+                                onChange={(e) => {
+                                    setInputToValue(e.target.value);
+                                }}
                                 value={inputToValue}
-                                aria-label='You will get'
+                                aria-label="You will get"
                             />
                         )}
                         {!searchToIsOpened ? (
                             <button
-                                className='currentTo'
+                                className="currentTo"
                                 style={currentToIcon}
                                 onClick={(e) => {
                                     setSearchToIsOpened(!searchToIsOpened);
                                 }}
-                                aria-label='Select currency to exchange'
+                                aria-label="Select currency to exchange"
                             >
                                 {exchangeTo.ticker.slice(0, 4)}
                             </button>
@@ -248,20 +242,20 @@ function Widget() {
                         ) : null}
                     </div>
                 </div>
-                <div className='goExchange'>
-                    <label htmlFor='exchangeAddress'>
+                <div className="goExchange">
+                    <label htmlFor="exchangeAddress">
                         Your {exchangeTo.name ? exchangeTo.name : 'Ethereum'}{' '}
                         address
                         <input
-                            type='text'
-                            className='exchangeAddress'
-                            id='exchangeAddress'
-                            aria-label='Enter exchange address'
+                            type="text"
+                            className="exchangeAddress"
+                            id="exchangeAddress"
+                            aria-label="Enter exchange address"
                         />
                     </label>
                     <button
-                        className='exchangeSubmit'
-                        aria-label='Make an exchange'
+                        className="exchangeSubmit"
+                        aria-label="Make an exchange"
                     >
                         Exchange
                         <div className={exchangeToError}>
