@@ -1,6 +1,6 @@
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-export default new (class serverAPI {
+export default new (class ServerAPI {
     async getCurrenies() {
         let promise = await fetch(
             `https://api.changenow.io/v1/currencies?active=true&fixedRate=true`
