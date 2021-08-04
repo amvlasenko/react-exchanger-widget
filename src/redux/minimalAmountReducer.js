@@ -1,7 +1,7 @@
 import { FETCH_MINIMAL_AMOUNT } from "./types";
 
 const initialState = {
-    minimalAmount: '',
+    minimalAmount: 0,
 };
 
 export const minimalAmountReducer = (state = initialState, action) => {

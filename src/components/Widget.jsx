@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ServerAPI from '../features/ServerAPI';
-import { fetchCurrencies, fetchMinimalAmount } from '../redux/actions';
+import {
+  fetchCurrencies,
+  fetchMinimalAmount,
+  setExchangeTo,
+  setExchangeFrom,
+  fetchEstimatedAmount,
+} from '../redux/actions';
 import { Currencies } from './Currencies';
 import { Search } from './Search';
 
 function Widget() {
   const dispatch = useDispatch();
   const currencies = useSelector((state) => state.currencies.currencies);
-  const [exchangeFrom, setExchangeFrom] = useState({
-    ticker: 'btc',
-    image: 'https://changenow.io/images/sprite/currencies/btc.svg',
-  });
-  const [exchangeTo, setExchangeTo] = useState({
-    ticker: 'eth',
-    image: 'https://changenow.io/images/sprite/currencies/eth.svg',
-  });
-
+  const exchangeFrom = useSelector((state) => state.setExchange.exchangeFrom);
+  const exchangeTo = useSelector((state) => state.setExchange.exchangeTo);
   const minimalAmount = useSelector(
     (state) => state.minimalAmount.minimalAmount
   );
-  //   const [minimalAmount, setMinimalAmount] = useState('');
-  const [estimatedAmount, setEstimatedAmount] = useState('');
+  const estimatedAmount = useSelector(
+    (state) => state.estimatedAmount.estimatedAmount
+  );
+
   const [inputFromValue, setInputFromValue] = useState('');
   const [inputToValue, setInputToValue] = useState('');
   const [searchFromIsOpened, setSearchFromIsOpened] = useState(false);
@@ -31,33 +32,34 @@ function Widget() {
   const [exchangeError, setExchangeError] = useState(false);
   const [exchangeErrorValue, setExchangeErrorValue] = useState('');
 
-  useEffect(() => {
+  const buildWidget = useCallback(() => {
     dispatch(fetchCurrencies());
     dispatch(fetchMinimalAmount(exchangeFrom.ticker, exchangeTo.ticker));
-  }, []);
+  }, [dispatch, exchangeFrom, exchangeTo]);
+
+  useEffect(() => {
+    buildWidget();
+  }, [buildWidget]);
+
+  useEffect(() => {
+    dispatch(
+      fetchEstimatedAmount(
+        inputFromValue,
+        exchangeFrom.ticker,
+        exchangeTo.ticker
+      )
+    );
+  }, [inputFromValue]);
+
+  useEffect(() => {
+    dispatch(fetchMinimalAmount(exchangeFrom.ticker, exchangeTo.ticker));
+  }, [dispatch, exchangeFrom, exchangeTo]);
 
   useEffect(() => {
     setExchangeError(!minimalAmount.error ? false : true);
     setExchangeErrorValue(!minimalAmount.error ? '' : minimalAmount.error);
     setInputFromValue(!minimalAmount.error ? minimalAmount.minAmount : '0');
   }, [minimalAmount]);
-
-  useEffect(() => {
-    async function fetchEstimatedAmount() {
-      let estimatedAmountResponse = await ServerAPI.getEstimatedAmount(
-        inputFromValue,
-        exchangeFrom.ticker,
-        exchangeTo.ticker
-      );
-      setInputToValue(estimatedAmountResponse);
-      setEstimatedAmount(estimatedAmountResponse);
-    }
-    fetchEstimatedAmount();
-  }, [inputFromValue]);
-
-  useEffect(() => {
-    dispatch(fetchMinimalAmount(exchangeFrom.ticker, exchangeTo.ticker));
-  }, [exchangeFrom, exchangeTo]);
 
   useEffect(() => {
     setExchangeError(estimatedAmount.estimatedAmount ? false : true);
@@ -111,9 +113,11 @@ function Widget() {
   };
 
   const setFrom = (name, image) => {
-    setExchangeFrom(
-      ...currencies.filter(
-        (currency) => currency.name === name && currency.image === image
+    dispatch(
+      setExchangeFrom(
+        ...currencies.filter(
+          (currency) => currency.name === name && currency.image === image
+        )
       )
     );
     setSearchFromIsOpened(false);
@@ -121,9 +125,11 @@ function Widget() {
   };
 
   const setTo = (name, image) => {
-    setExchangeTo(
-      ...currencies.filter(
-        (currency) => currency.name === name && currency.image === image
+    dispatch(
+      setExchangeTo(
+        ...currencies.filter(
+          (currency) => currency.name === name && currency.image === image
+        )
       )
     );
     setSearchToIsOpened(false);
@@ -174,8 +180,7 @@ function Widget() {
               <Currencies
                 searchString={searchFromStringValue}
                 currencies={currencies}
-                setCurrent={setFrom}
-                getMinAmount={ServerAPI.getMinAmount}
+                setExchange={setFrom}
               />
             ) : null}
           </div>
@@ -219,8 +224,7 @@ function Widget() {
               <Currencies
                 searchString={searchToStringValue}
                 currencies={currencies}
-                setCurrent={setTo}
-                getMinAmount={ServerAPI.getMinAmount}
+                setExchange={setTo}
               />
             ) : null}
           </div>
