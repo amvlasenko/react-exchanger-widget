@@ -1,4 +1,4 @@
-const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = 'bf09c6abbb5ec5bbbd0e210ad018ab010d460dc474c2e7361ccd27378e874a05'
 
 export default new (class ServerAPI {
     async getCurrenies() {
