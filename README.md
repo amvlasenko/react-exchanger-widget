@@ -1,4 +1,4 @@
-## Ссылка на деплой: https://amvlasenko.github.io/react-exchanger-widget/
+## Ссылка на GitHub Pages: https://amvlasenko.github.io/react-exchanger-widget/
 # React-exchanger-widget
 **Зачем:**
 
