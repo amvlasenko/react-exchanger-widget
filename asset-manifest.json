@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/react-exchanger-widget/static/css/main.75e54b06.chunk.css",
-    "main.js": "/react-exchanger-widget/static/js/main.4e505195.chunk.js",
-    "main.js.map": "/react-exchanger-widget/static/js/main.4e505195.chunk.js.map",
+    "main.css": "/react-exchanger-widget/static/css/main.ad1a7b81.chunk.css",
+    "main.js": "/react-exchanger-widget/static/js/main.446c3cd3.chunk.js",
+    "main.js.map": "/react-exchanger-widget/static/js/main.446c3cd3.chunk.js.map",
     "runtime-main.js": "/react-exchanger-widget/static/js/runtime-main.a592922b.js",
     "runtime-main.js.map": "/react-exchanger-widget/static/js/runtime-main.a592922b.js.map",
-    "static/js/2.6f3262d7.chunk.js": "/react-exchanger-widget/static/js/2.6f3262d7.chunk.js",
-    "static/js/2.6f3262d7.chunk.js.map": "/react-exchanger-widget/static/js/2.6f3262d7.chunk.js.map",
+    "static/js/2.876cb281.chunk.js": "/react-exchanger-widget/static/js/2.876cb281.chunk.js",
+    "static/js/2.876cb281.chunk.js.map": "/react-exchanger-widget/static/js/2.876cb281.chunk.js.map",
     "index.html": "/react-exchanger-widget/index.html",
-    "static/css/main.75e54b06.chunk.css.map": "/react-exchanger-widget/static/css/main.75e54b06.chunk.css.map",
-    "static/js/2.6f3262d7.chunk.js.LICENSE.txt": "/react-exchanger-widget/static/js/2.6f3262d7.chunk.js.LICENSE.txt"
+    "static/css/main.ad1a7b81.chunk.css.map": "/react-exchanger-widget/static/css/main.ad1a7b81.chunk.css.map",
+    "static/js/2.876cb281.chunk.js.LICENSE.txt": "/react-exchanger-widget/static/js/2.876cb281.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a592922b.js",
-    "static/js/2.6f3262d7.chunk.js",
-    "static/css/main.75e54b06.chunk.css",
-    "static/js/main.4e505195.chunk.js"
+    "static/js/2.876cb281.chunk.js",
+    "static/css/main.ad1a7b81.chunk.css",
+    "static/js/main.446c3cd3.chunk.js"
   ]
 }
